@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>SkyBioML Mission Factory v4.0 (Exiobio)</title>
+    <title>SkyBioML Mission Factory v4.1 (Stats)</title>
     <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
     <style>
         body {
@@ -25,9 +25,9 @@
     </style>
 </head>
 <body>
-    <h1>SkyBioML // Mission Factory v4.0</h1>
+    <h1>SkyBioML // Mission Factory v4.1</h1>
     <div class="upload-btn-wrapper">
-        <button class="btn">GENERATE BIO-LOG</button>
+        <button class="btn">GENERATE STATS LOG</button>
         <input type="file" id="csvInput" accept=".csv" />
     </div>
     <div class="status" id="status">Waiting for CSV data...</div>
@@ -90,11 +90,30 @@
     h1 { text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #39FF14; padding-bottom: 10px; margin: 0 0 10px 0; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); font-weight: 400; text-align: center; }
     .subtitle { font-size: 18px; color: #ff4444; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 30px; text-align: center; text-shadow: 0 0 10px rgba(255, 0, 0, 0.6); font-weight: bold; }
     
+    /* ДАШБОРД СО СТАТИСТИКОЙ */
+    #dashboard {
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 10px;
+        font-size: 14px;
+        text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+    }
+    
+    .stat-group { display: flex; gap: 20px; }
+    .total-item { display: flex; align-items: center; gap: 8px; font-size: 16px; }
+    
+    /* Цвета итогов */
+    .total-green { color: #39FF14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.8); }
+    .total-red { color: #ff4444; text-shadow: 0 0 10px rgba(255, 68, 68, 0.8); }
+    .total-val { font-size: 20px; font-weight: bold; }
+
     #progress-container { width: 100%; max-width: 800px; background: #0d1a0d; border: 1px solid #39FF14; height: 24px; margin-bottom: 20px; position: relative; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
     #progress-bar { height: 100%; background: #39FF14; width: 0%; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 15px #39FF14; position: relative; }
-    #stats { margin-bottom: 20px; font-size: 14px; text-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
     
-    .container { width: 100%; max-width: 850px; padding-bottom: 50px; } /* Сделали пошире для новых кнопок */
+    .container { width: 100%; max-width: 850px; padding-bottom: 50px; }
     
     .row { display: flex; align-items: center; background: rgba(57, 255, 20, 0.05); border: 1px solid #1a4d1a; border-left: 4px solid #1a4d1a; margin-bottom: 10px; padding: 12px 15px; transition: all 0.2s; position: relative; }
     .row:hover { border-color: #39FF14; border-left-color: #39FF14; background: rgba(57, 255, 20, 0.15); transform: translateX(5px); box-shadow: -5px 0 15px rgba(57, 255, 20, 0.2); }
@@ -107,25 +126,20 @@
     .jump-badge { font-size: 10px; border: 1px solid #20b2aa; color: #20b2aa; padding: 2px 6px; border-radius: 2px; margin-right: 10px; white-space: nowrap; background: rgba(32, 178, 170, 0.1); }
     
     .controls { display: flex; gap: 8px; align-items: center; }
-    
     button { background: rgba(0,0,0,0.5); border: 1px solid #39FF14; color: #39FF14; padding: 0; cursor: pointer; font-family: 'Audiowide', sans-serif; text-transform: uppercase; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
     button:hover { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
     
     .copy-btn { height: 30px; padding: 0 15px; font-size: 12px; min-width: 60px; }
-    .check-btn { width: 30px; height: 30px; font-size: 14px; margin-right: 10px; } /* Отступ перед счетчиками */
+    .check-btn { width: 30px; height: 30px; font-size: 14px; margin-right: 10px; } 
     .check-btn.checked { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
     
-    /* СТИЛИ СЧЕТЧИКОВ */
     .counter-wrapper { display: flex; align-items: center; margin-left: 5px; background: rgba(0,0,0,0.3); border-radius: 4px; padding: 2px; border: 1px solid #222; }
-    
     .counter-btn { width: 24px; height: 24px; font-size: 10px; border: 1px solid #444; color: #666; }
     .counter-val { min-width: 30px; text-align: center; font-size: 16px; font-weight: bold; }
     
-    /* Зеленый счетчик */
     .green-zone .counter-val { color: #39FF14; text-shadow: 0 0 8px rgba(57, 255, 20, 0.6); }
     .green-zone .counter-btn:hover { border-color: #39FF14; color: #39FF14; background: rgba(57, 255, 20, 0.1); }
     
-    /* Красный счетчик */
     .red-zone { border-color: #331111; }
     .red-zone .counter-val { color: #ff4444; text-shadow: 0 0 8px rgba(255, 68, 68, 0.6); }
     .red-zone .counter-btn:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.1); }
@@ -139,30 +153,39 @@
     <div class="vignette"></div>
     <h1>${missionName}</h1>
     <div class="subtitle">Commander: TAO | Squadron: SkyBioML</div>
-    <div id="stats">SYSTEMS SCANNED: <span id="count">0/0</span></div>
+    
+    <div id="dashboard">
+        <div id="stats-scanned">SYSTEMS SCANNED: <span id="count">0/0</span></div>
+        <div class="stat-group">
+            <div class="total-item total-green">
+                STRATUM: <span id="total-g" class="total-val">0</span>
+            </div>
+            <div class="total-item total-red">
+                OTHER: <span id="total-r" class="total-val">0</span>
+            </div>
+        </div>
+    </div>
+
     <div id="progress-container"><div id="progress-bar"></div></div>
     <div class="container" id="list-container"></div>
+    
     <script>
         const systems = ${systemsString};
         const listContainer = document.getElementById('list-container');
         const countSpan = document.getElementById('count');
         const progressBar = document.getElementById('progress-bar');
+        const totalGSpan = document.getElementById('total-g');
+        const totalRSpan = document.getElementById('total-r');
         const storageKey = 'skybioml_log_' + "${missionName}".replace(/\\s+/g, '_');
         
-        // Загрузка состояния (с поддержкой старого формата)
         let savedState = {};
         try { 
             const raw = localStorage.getItem(storageKey);
             if(raw) {
                 const parsed = JSON.parse(raw);
-                // Проверка: это старый формат (просто true/false) или новый (объект)?
-                // Если значения - булевы, конвертируем в объект
                 const keys = Object.keys(parsed);
                 if (keys.length > 0 && typeof parsed[keys[0]] === 'boolean') {
-                    // Конвертация старого формата
-                    for (let k in parsed) {
-                        savedState[k] = { done: parsed[k], g: 0, r: 0 };
-                    }
+                    for (let k in parsed) { savedState[k] = { done: parsed[k], g: 0, r: 0 }; }
                 } else {
                     savedState = parsed;
                 }
@@ -172,15 +195,17 @@
         function render() {
             listContainer.innerHTML = '';
             let completed = 0;
+            let totalG = 0;
+            let totalR = 0;
             
             systems.forEach((item, index) => {
                 const sysName = item.name;
                 const jumps = item.jumps;
-                
-                // Получаем данные для системы или дефолтные
                 const state = savedState[sysName] || { done: false, g: 0, r: 0 };
                 
                 if (state.done) completed++;
+                totalG += (state.g || 0);
+                totalR += (state.r || 0);
                 
                 const row = document.createElement('div');
                 row.className = 'row ' + (state.done ? 'done' : '');
@@ -194,17 +219,12 @@
                     </div>
                     <div class="controls">
                         <button class="copy-btn" onclick="copyText('\${sysName}', this)">COPY</button>
-                        
-                        <button class="check-btn \${state.done ? 'checked' : ''}" onclick="toggleDone('\${sysName}')">
-                            \${state.done ? '✓' : ''}
-                        </button>
-                        
+                        <button class="check-btn \${state.done ? 'checked' : ''}" onclick="toggleDone('\${sysName}')">\${state.done ? '✓' : ''}</button>
                         <div class="counter-wrapper green-zone">
                             <button class="counter-btn" onclick="updateCount('\${sysName}', 'g', -1)">◀</button>
                             <div class="counter-val">\${state.g}</div>
                             <button class="counter-btn" onclick="updateCount('\${sysName}', 'g', 1)">▶</button>
                         </div>
-                        
                         <div class="counter-wrapper red-zone">
                             <button class="counter-btn" onclick="updateCount('\${sysName}', 'r', -1)">◀</button>
                             <div class="counter-val">\${state.r}</div>
@@ -215,53 +235,40 @@
                 listContainer.appendChild(row);
             });
             
+            // ОБНОВЛЕНИЕ ГЛАВНЫХ ЦИФР
             const percent = (completed / systems.length) * 100;
             progressBar.style.width = percent + '%';
             countSpan.innerText = completed + ' / ' + systems.length + ' (' + Math.round(percent) + '%)';
+            totalGSpan.innerText = totalG;
+            totalRSpan.innerText = totalR;
+            
             if (percent === 100) { progressBar.style.background = "#20b2aa"; progressBar.style.boxShadow = "0 0 20px #20b2aa"; }
             else { progressBar.style.background = "#39FF14"; progressBar.style.boxShadow = "0 0 15px #39FF14"; }
         }
 
-        // Переключение галочки
         window.toggleDone = function(sysName) {
             if (!savedState[sysName]) savedState[sysName] = { done: false, g: 0, r: 0 };
             savedState[sysName].done = !savedState[sysName].done;
-            save();
-            render();
+            save(); render();
         }
 
-        // Обновление счетчиков
         window.updateCount = function(sysName, type, delta) {
             if (!savedState[sysName]) savedState[sysName] = { done: false, g: 0, r: 0 };
-            
-            if (type === 'g') {
-                savedState[sysName].g = Math.max(0, (savedState[sysName].g || 0) + delta);
-            } else if (type === 'r') {
-                savedState[sysName].r = Math.max(0, (savedState[sysName].r || 0) + delta);
-            }
-            
-            save();
-            render();
+            if (type === 'g') savedState[sysName].g = Math.max(0, (savedState[sysName].g || 0) + delta);
+            else if (type === 'r') savedState[sysName].r = Math.max(0, (savedState[sysName].r || 0) + delta);
+            save(); render();
         }
 
-        function save() {
-            localStorage.setItem(storageKey, JSON.stringify(savedState));
-        }
+        function save() { localStorage.setItem(storageKey, JSON.stringify(savedState)); }
 
         window.copyText = function(text, btnElement) { 
             navigator.clipboard.writeText(text).then(() => { 
                 const originalText = btnElement.innerText; 
                 btnElement.innerText = "COPIED"; 
-                btnElement.style.borderColor = "#20b2aa"; 
-                btnElement.style.color = "#20b2aa"; 
-                setTimeout(() => { 
-                    btnElement.innerText = originalText; 
-                    btnElement.style.borderColor = ""; 
-                    btnElement.style.color = ""; 
-                }, 1000); 
+                btnElement.style.borderColor = "#20b2aa"; btnElement.style.color = "#20b2aa"; 
+                setTimeout(() => { btnElement.innerText = originalText; btnElement.style.borderColor = ""; btnElement.style.color = ""; }, 1000); 
             }); 
         }
-        
         render();
     <\/script>
 </body>
