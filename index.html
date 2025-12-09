@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>SkyBioML Command Center</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="SKYBIOML COMMAND CENTER" />
+    <meta property="og:description" content="Operational Hub // Commander TAO" />
+    <meta name="theme-color" content="#39FF14">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #050a05;
+            color: #39FF14;
+            font-family: 'Audiowide', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* SCANLINES EFFECT */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.15;
+        }
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 50%, black 100%);
+            pointer-events: none;
+            z-index: 998;
+            opacity: 0.6;
+        }
+
+        h1 {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-bottom: 2px solid #39FF14;
+            padding-bottom: 15px;
+            margin: 0 0 10px 0;
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.8);
+            text-align: center;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #ff4444; /* КРАСНЫЙ */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 60px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+            font-weight: bold;
+        }
+
+        /* MAIN BUTTON (GENERATOR) */
+        .main-action {
+            margin-bottom: 60px;
+            text-decoration: none;
+        }
+
+        .btn-large {
+            display: inline-block;
+            border: 2px solid #39FF14;
+            color: #050a05;
+            background-color: #39FF14;
+            padding: 25px 50px;
+            font-size: 24px;
+            font-family: 'Audiowide', sans-serif;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);
+            letter-spacing: 2px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-large:hover {
+            background-color: #050a05;
+            color: #39FF14;
+            box-shadow: 0 0 50px rgba(57, 255, 20, 0.9);
+            transform: scale(1.05);
+        }
+
+        /* MISSION LIST SECTION */
+        .archive-title {
+            font-size: 16px;
+            color: #20b2aa;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #1a331a;
+            padding-bottom: 5px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .mission-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .mission-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(57, 255, 20, 0.05);
+            border: 1px solid #1a4d1a;
+            border-left: 4px solid #1a4d1a;
+            padding: 20px 30px;
+            text-decoration: none;
+            color: #39FF14;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .mission-link:hover {
+            border-color: #39FF14;
+            border-left-color: #39FF14;
+            background: rgba(57, 255, 20, 0.15);
+            transform: translateX(10px);
+            box-shadow: -5px 0 15px rgba(57, 255, 20, 0.2);
+        }
+
+        .mission-link span {
+            color: #20b2aa;
+            font-size: 12px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <h1>SKYBIOML COMMAND CENTER</h1>
+    <div class="subtitle">Commander: TAO</div>
+
+    <a href="generator.html" class="main-action">
+        <div class="btn-large">INITIALIZE MISSION GENERATOR</div>
+    </a>
+
+    <div class="archive-title">FLIGHT LOG ARCHIVE</div>
+
+    <div class="mission-list">
+        
+        <a href="Log_eDelrian.html" class="mission-link">
+            LOG // eDelrian
+            <span>ACTIVE</span>
+        </a>
+
+        </div>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>SkyBioML Mission Factory v3.2 (Stratum Green)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0b0d10;
+            color: #39FF14; /* Зеленый неон */
+            font-family: 'Audiowide', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 { margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+        
+        .upload-btn-wrapper { position: relative; overflow: hidden; display: inline-block; }
+        
+        .btn { 
+            border: 2px solid #39FF14; 
+            color: #39FF14; 
+            background-color: transparent; 
+            padding: 20px 40px; 
+            font-size: 20px; 
+            font-family: 'Audiowide', sans-serif; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            transition: 0.3s; 
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); 
+        }
+        
+        .btn:hover { 
+            background-color: #39FF14; 
+            color: #000; 
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.8); 
+        }
+        
+        .upload-btn-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+        .status { margin-top: 20px; color: #5aaebc; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>SkyBioML // Mission Factory v3.2</h1>
+    <div class="upload-btn-wrapper">
+        <button class="btn">GENERATE STRATUM LOG</button>
+        <input type="file" id="csvInput" accept=".csv" />
+    </div>
+    <div class="status" id="status">Waiting for CSV data...</div>
+
+    <script>
+        document.getElementById('csvInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const missionName = file.name.replace(/\.[^/.]+$/, "");
+            document.getElementById('status').innerText = "Processing: " + missionName + "...";
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const csvText = event.target.result;
+                const systemsArray = parseCSV(csvText);
+                if (systemsArray.length > 0) {
+                    generateHTML(missionName, systemsArray);
+                } else { alert("Error: No valid systems found."); }
+            };
+            reader.readAsText(file);
+        });
+
+        function parseCSV(text) {
+            const lines = text.split(/\r\n|\n/);
+            const systems = [];
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line || (i === 0 && (line.toLowerCase().includes("наименование") || line.toLowerCase().includes("system")))) continue;
+                let parts = line.split(',');
+                if (parts.length < 2) parts = line.split(';');
+                let sysName = parts[0] ? parts[0].trim().replace(/^"|"$/g, '') : "";
+                let jumpsCount = parts[1] ? parts[1].trim().replace(/^"|"$/g, '') : "0";
+                if (sysName) systems.push({ name: sysName, jumps: jumpsCount });
+            }
+            return systems;
+        }
+
+        function generateHTML(missionName, systems) {
+            const systemsString = JSON.stringify(systems);
+            
+            // ГЕНЕРАЦИЯ ЗЕЛЕНОГО ИНТЕРФЕЙСА
+            const htmlContent = `
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Mission Log: ${missionName}</title>
+
+<meta property="og:title" content="STRATUM LOG // ${missionName}" />
+<meta property="og:description" content="Commander: TAO | Systems: ${systems.length} | Squadron: SkyBioML" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#39FF14">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<style>
+    /* ОСНОВНОЙ ЦВЕТ: #39FF14 (Neon Green) */
+    
+    body { background-color: #050a05; color: #39FF14; font-family: 'Audiowide', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-y: scroll; }
+    
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #050a05; }
+    ::-webkit-scrollbar-thumb { background: #1a331a; border: 1px solid #39FF14; }
+    ::-webkit-scrollbar-thumb:hover { background: #39FF14; }
+    
+    h1 { text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #39FF14; padding-bottom: 10px; margin: 0 0 10px 0; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); font-weight: 400; text-align: center; }
+    
+    /* КРАСНЫЙ ЗАГОЛОВОК КОМАНДИРА (ОСТАВИЛИ КАК БЫЛО) */
+    .subtitle { 
+        font-size: 18px; 
+        color: #ff4444; 
+        text-transform: uppercase; 
+        letter-spacing: 1.5px; 
+        margin-bottom: 30px; 
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        font-weight: bold;
+    }
+
+    /* ПРОГРЕСС БАР (ЗЕЛЕНЫЙ) */
+    #progress-container { width: 100%; max-width: 600px; background: #0d1a0d; border: 1px solid #39FF14; height: 24px; margin-bottom: 20px; position: relative; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
+    #progress-bar { height: 100%; background: #39FF14; width: 0%; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 15px #39FF14; position: relative; }
+    #progress-bar::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); }
+    
+    #stats { margin-bottom: 20px; font-size: 14px; text-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
+    .container { width: 100%; max-width: 700px; padding-bottom: 50px; }
+    
+    /* СТРОКИ СИСТЕМ */
+    .row { display: flex; align-items: center; background: rgba(57, 255, 20, 0.05); border: 1px solid #1a4d1a; border-left: 4px solid #1a4d1a; margin-bottom: 10px; padding: 12px 20px; transition: all 0.2s; position: relative; }
+    .row:hover { border-color: #39FF14; border-left-color: #39FF14; background: rgba(57, 255, 20, 0.15); transform: translateX(5px); box-shadow: -5px 0 15px rgba(57, 255, 20, 0.2); }
+    
+    .row.done { opacity: 0.4; border-color: #111; border-left-color: #111; background: #000; transform: none; box-shadow: none; filter: grayscale(100%); }
+    .row.done .system-name { text-decoration: line-through; color: #444; text-shadow: none; }
+    
+    .system-info { flex-grow: 1; display: flex; align-items: center; }
+    .system-num { color:#20b2aa; margin-right:15px; font-size: 0.8em; min-width: 30px; }
+    .system-name { font-size: 18px; letter-spacing: 0.5px; margin-right: 10px; }
+    
+    /* Прыжки (чуть другой оттенок, ближе к Teal, чтобы не сливалось) */
+    .jump-badge { font-size: 10px; border: 1px solid #20b2aa; color: #20b2aa; padding: 2px 6px; border-radius: 2px; margin-right: 15px; white-space: nowrap; background: rgba(32, 178, 170, 0.1); }
+    
+    .controls { display: flex; gap: 12px; }
+    
+    button { background: rgba(0,0,0,0.5); border: 1px solid #39FF14; color: #39FF14; padding: 8px 16px; cursor: pointer; font-family: 'Audiowide', sans-serif; text-transform: uppercase; font-size: 12px; transition: 0.2s; letter-spacing: 1px; }
+    button:hover { background: #39FF14; color: #000; box-shadow: 0 0 20px #39FF14; }
+    
+    .copy-btn { min-width: 90px; }
+    .check-btn { width: 36px; text-align: center; padding: 8px 0; font-size: 14px; }
+    .check-btn.checked { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
+    
+    .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3)); background-size: 100% 4px; pointer-events: none; z-index: 999; opacity: 0.15; }
+    .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 60%, black 100%); pointer-events: none; z-index: 998; opacity: 0.6; }
+</style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <h1>${missionName}</h1>
+    <div class="subtitle">Commander: TAO | Squadron: SkyBioML</div>
+    <div id="stats">SYSTEMS SCANNED: <span id="count">0/0</span></div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <div class="container" id="list-container"></div>
+    <script>
+        const systems = ${systemsString};
+        const listContainer = document.getElementById('list-container');
+        const countSpan = document.getElementById('count');
+        const progressBar = document.getElementById('progress-bar');
+        const storageKey = 'skybioml_log_' + "${missionName}".replace(/\\s+/g, '_');
+        let savedChecks = {};
+        try { if(localStorage.getItem(storageKey)) savedChecks = JSON.parse(localStorage.getItem(storageKey)); } catch(e){}
+
+        function render() {
+            listContainer.innerHTML = '';
+            let completed = 0;
+            systems.forEach((item, index) => {
+                const sysName = item.name;
+                const jumps = item.jumps;
+                const isDone = savedChecks[sysName] === true;
+                if (isDone) completed++;
+                const row = document.createElement('div');
+                row.className = 'row ' + (isDone ? 'done' : '');
+                const num = (index + 1).toString().padStart(2, '0');
+                row.innerHTML = \`<div class="system-info"><span class="system-num">\${num}</span><div class="system-name">\${sysName}</div><div class="jump-badge">\${jumps} JUMPS</div></div><div class="controls"><button class="copy-btn" onclick="copyText('\${sysName}', this)">COPY</button><button class="check-btn \${isDone ? 'checked' : ''}" onclick="toggleDone('\${sysName}')">\${isDone ? '✓' : ''}</button></div>\`;
+                listContainer.appendChild(row);
+            });
+            const percent = (completed / systems.length) * 100;
+            progressBar.style.width = percent + '%';
+            countSpan.innerText = completed + ' / ' + systems.length + ' (' + Math.round(percent) + '%)';
+            if (percent === 100) { progressBar.style.background = "#20b2aa"; progressBar.style.boxShadow = "0 0 20px #20b2aa"; }
+            else { progressBar.style.background = "#39FF14"; progressBar.style.boxShadow = "0 0 15px #39FF14"; }
+        }
+        window.toggleDone = function(sysName) { if (savedChecks[sysName]) delete savedChecks[sysName]; else savedChecks[sysName] = true; localStorage.setItem(storageKey, JSON.stringify(savedChecks)); render(); }
+        window.copyText = function(text, btnElement) { navigator.clipboard.writeText(text).then(() => { const originalText = btnElement.innerText; btnElement.innerText = "COPIED"; btnElement.style.borderColor = "#20b2aa"; btnElement.style.color = "#20b2aa"; setTimeout(() => { btnElement.innerText = originalText; btnElement.style.borderColor = ""; btnElement.style.color = ""; }, 1000); }); }
+        render();
+    <\/script>
+</body>
+</html>`;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Log_${missionName}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            document.getElementById('status').innerText = "Generated: Log_" + missionName + ".html";
+        }
+    </script>
+</body>
+</html>
