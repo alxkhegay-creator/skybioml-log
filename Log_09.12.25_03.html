@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Mission Log: Log_09.12.25_03</title>
+<meta property="og:title" content="STRATUM LOG // Log_09.12.25_03" />
+<meta property="og:description" content="Commander: III TAO III | Systems: 70 | Squadron: SkyBioML" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#39FF14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<style>
+    body { background-color: #050a05; color: #39FF14; font-family: 'Audiowide', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-y: scroll; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #050a05; }
+    ::-webkit-scrollbar-thumb { background: #1a331a; border: 1px solid #39FF14; }
+    ::-webkit-scrollbar-thumb:hover { background: #39FF14; }
+    h1 { text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #39FF14; padding-bottom: 10px; margin: 0 0 10px 0; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); font-weight: 400; text-align: center; }
+    .subtitle { font-size: 18px; color: #ff4444; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 30px; text-align: center; text-shadow: 0 0 10px rgba(255, 0, 0, 0.6); font-weight: bold; }
+    #dashboard { width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; font-size: 14px; text-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
+    .stat-group { display: flex; align-items: center; gap: 10px; font-size: 16px; }
+    .total-label { color: #39FF14; font-weight: bold; margin-right: 5px; }
+    .total-val { font-size: 20px; font-weight: bold; min-width: 30px; text-align: center; }
+    .total-green { color: #39FF14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.8); }
+    .total-red { color: #ff4444; text-shadow: 0 0 10px rgba(255, 68, 68, 0.8); }
+    #progress-container { width: 100%; max-width: 800px; background: #0d1a0d; border: 1px solid #39FF14; height: 24px; margin-bottom: 20px; position: relative; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
+    #progress-bar { height: 100%; background: #39FF14; width: 0%; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 15px #39FF14; position: relative; }
+    .container { width: 100%; max-width: 850px; padding-bottom: 50px; }
+    .row { display: flex; align-items: center; background: rgba(57, 255, 20, 0.05); border: 1px solid #1a4d1a; border-left: 4px solid #1a4d1a; margin-bottom: 10px; padding: 12px 15px; transition: all 0.2s; position: relative; }
+    .row:hover { border-color: #39FF14; border-left-color: #39FF14; background: rgba(57, 255, 20, 0.15); transform: translateX(5px); box-shadow: -5px 0 15px rgba(57, 255, 20, 0.2); }
+    .row.done { opacity: 0.5; border-color: #111; border-left-color: #111; background: #000; filter: grayscale(80%); }
+    .row.done .system-name { text-decoration: line-through; color: #444; text-shadow: none; }
+    .system-info { flex-grow: 1; display: flex; align-items: center; overflow: hidden; }
+    .system-num { color:#20b2aa; margin-right:15px; font-size: 0.8em; min-width: 25px; }
+    .system-name { font-size: 16px; letter-spacing: 0.5px; margin-right: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .jump-badge { font-size: 10px; border: 1px solid #20b2aa; color: #20b2aa; padding: 2px 6px; border-radius: 2px; margin-right: 10px; white-space: nowrap; background: rgba(32, 178, 170, 0.1); }
+    .controls { display: flex; gap: 8px; align-items: center; }
+    button { background: rgba(0,0,0,0.5); border: 1px solid #39FF14; color: #39FF14; padding: 0; cursor: pointer; font-family: 'Audiowide', sans-serif; text-transform: uppercase; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    button:hover { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
+    .copy-btn { height: 30px; padding: 0 15px; font-size: 12px; min-width: 60px; }
+    .check-btn { width: 30px; height: 30px; font-size: 14px; margin-right: 10px; } 
+    .check-btn.checked { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
+    .counter-wrapper { display: flex; align-items: center; margin-left: 5px; background: rgba(0,0,0,0.3); border-radius: 4px; padding: 2px; border: 1px solid #222; }
+    .counter-btn { width: 24px; height: 24px; font-size: 10px; border: 1px solid #444; color: #666; }
+    .counter-val { min-width: 30px; text-align: center; font-size: 16px; font-weight: bold; }
+    .green-zone .counter-val { color: #39FF14; text-shadow: 0 0 8px rgba(57, 255, 20, 0.6); }
+    .green-zone .counter-btn:hover { border-color: #39FF14; color: #39FF14; background: rgba(57, 255, 20, 0.1); }
+    .red-zone { border-color: #331111; }
+    .red-zone .counter-val { color: #ff4444; text-shadow: 0 0 8px rgba(255, 68, 68, 0.6); }
+    .red-zone .counter-btn:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.1); }
+    .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3)); background-size: 100% 4px; pointer-events: none; z-index: 999; opacity: 0.15; }
+    .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 60%, black 100%); pointer-events: none; z-index: 998; opacity: 0.6; }
+</style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <h1>Log_09.12.25_03</h1>
+    <div class="subtitle">Commander: III TAO III | Squadron: SkyBioML</div>
+    <div id="dashboard">
+        <div id="stats-scanned">SYSTEMS SCANNED: <span id="count">0/0</span></div>
+        <div class="stat-group">
+            <span class="total-label">TOTAL:</span>
+            <span id="total-g" class="total-val total-green">0</span>
+            <span id="total-r" class="total-val total-red" style="margin-left: 15px;">0</span>
+        </div>
+    </div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <div class="container" id="list-container"></div>
+    <script>
+        const systems = [{"name":"Ridgai LY-I d9-10","jumps":"4"},{"name":"Ridgai MI-K d8-6","jumps":"3"},{"name":"Ridgai PF-N c20-1","jumps":"3"},{"name":"Swoils PY-Z c16-4","jumps":"3"},{"name":"Swoils BP-I c12-3","jumps":"4"},{"name":"Swoils DI-Q d6-31","jumps":"2"},{"name":"Swoils EY-G d11-4","jumps":"7"},{"name":"Swoils EE-A b46-0","jumps":"3"},{"name":"Ridgai DS-U b57-0","jumps":"8"},{"name":"Ridgai OO-Z d13-9","jumps":"3"},{"name":"Ridgai NI-B d13-10","jumps":"4"},{"name":"Ridgai DH-Y b55-0","jumps":"4"},{"name":"Bleou Thoi LA-A d8","jumps":"2"},{"name":"Bleou Thoi QK-A c2","jumps":"2"},{"name":"Bleou Thoi LQ-A b0","jumps":"1"},{"name":"Bleou Thoi ML-Y d6","jumps":"2"},{"name":"Bleou Thoi IW-O b6-0","jumps":"2"},{"name":"Bleou Thoi LH-F b11-0","jumps":"2"},{"name":"Blue Eohm UY-U c5-2","jumps":"5"},{"name":"Bleou Thoi JL-Y b14-0","jumps":"3"},{"name":"Bleou Thoi ZS-U d2-8","jumps":"2"},{"name":"Bleou Thoi JU-Q c5-0","jumps":"4"},{"name":"Bleou Thoi BM-M b8-0","jumps":"3"},{"name":"Bleou Thoi SI-T d3-5","jumps":"5"},{"name":"Bleou Thoi SR-C b13-0","jumps":"2"},{"name":"Blue Eohm RK-R c7-3","jumps":"4"},{"name":"Blue Eohm YJ-Y d1-3","jumps":"6"},{"name":"Blaa Eop JK-T c5-0","jumps":"7"},{"name":"Blaa Eop AC-G b3-0","jumps":"6"},{"name":"Blau Thaa TP-G c10-2","jumps":"6"},{"name":"Blaa Eop WG-S d5-17","jumps":"3"},{"name":"Blau Thaa LE-Y c14-0","jumps":"3"},{"name":"Blau Thaa UB-S c18-1","jumps":"4"},{"name":"Blau Thaa WK-O d6-2","jumps":"4"},{"name":"Bleou Thoi GA-E c13-0","jumps":"5"},{"name":"Bleou Thoi KB-E c12-0","jumps":"8"},{"name":"Bleou Thoi FA-Y c14-0","jumps":"3"},{"name":"Bleou Thoi IQ-P d5-0","jumps":"3"},{"name":"Bleou Thoi LE-J c9-1","jumps":"5"},{"name":"Blau Thaa GM-V d2-5","jumps":"5"},{"name":"Blau Thaa CS-R c5-0","jumps":"3"},{"name":"Bleou Thoi QR-V d2-1","jumps":"3"},{"name":"Bleou Thoi TL-V c3-0","jumps":"2"},{"name":"Ridgai NI-G c25-0","jumps":"5"},{"name":"Ridgai PS-P c20-0","jumps":"4"},{"name":"Ridgai XD-Q c19-0","jumps":"5"},{"name":"Ridgai EA-P c19-0","jumps":"4"},{"name":"Ridgai WD-K d8-15","jumps":"2"},{"name":"Swoils WX-B b33-0","jumps":"3"},{"name":"Swoils FR-V b35-0","jumps":"4"},{"name":"Ridgai UD-K d8-11","jumps":"3"},{"name":"Ridgai MQ-P b47-0","jumps":"5"},{"name":"Ridgai VZ-G d10-9","jumps":"2"},{"name":"Ridgai LB-P b47-0","jumps":"2"},{"name":"Ridgai LU-E c25-1","jumps":"2"},{"name":"Ridgai FA-J c24-0","jumps":"8"},{"name":"Ridgai BW-H b12-0","jumps":"11"},{"name":"Wredgu AA-A c29-2","jumps":"5"},{"name":"Ridgai VN-B d1","jumps":"9"},{"name":"Wredgu DM-K d9-2","jumps":"8"},{"name":"Wredgu ZU-N d7-3","jumps":"4"},{"name":"Wredgaea YM-H c11-1","jumps":"7"},{"name":"Wredgaea GX-R c5-1","jumps":"5"},{"name":"Wredgaea SO-R d4-11","jumps":"6"},{"name":"Wredgaea YF-E b12-2","jumps":"3"},{"name":"Wredgaea OH-M b7-1","jumps":"2"},{"name":"Flyua Drye JZ-B c2-15","jumps":"3"},{"name":"Flyua Drye HX-A d1-1","jumps":"2"},{"name":"Flyua Drye UE-X d2-0","jumps":"4"},{"name":"Flyua Drye PS-A d1-25","jumps":"4"}];
+        const listContainer = document.getElementById('list-container');
+        const countSpan = document.getElementById('count');
+        const progressBar = document.getElementById('progress-bar');
+        const totalGSpan = document.getElementById('total-g');
+        const totalRSpan = document.getElementById('total-r');
+        const storageKey = 'skybioml_log_' + "Log_09.12.25_03";
+        let savedState = {};
+        try { const raw = localStorage.getItem(storageKey); if(raw) savedState = JSON.parse(raw); } catch(e){}
+        function render() {
+            listContainer.innerHTML = '';
+            let completed = 0; let totalG = 0; let totalR = 0;
+            systems.forEach((item, index) => {
+                const sysName = item.name; const jumps = item.jumps;
+                const state = savedState[sysName] || { done: false, g: 0, r: 0 };
+                if (state.done) completed++;
+                totalG += (state.g || 0); totalR += (state.r || 0);
+                const row = document.createElement('div');
+                row.className = 'row ' + (state.done ? 'done' : '');
+                const num = (index + 1).toString().padStart(2, '0');
+                row.innerHTML = `<div class="system-info"><span class="system-num">${num}</span><div class="system-name">${sysName}</div><div class="jump-badge">${jumps} JUMPS</div></div><div class="controls"><button class="copy-btn" onclick="copyText('${sysName}', this)">COPY</button><button class="check-btn ${state.done ? 'checked' : ''}" onclick="toggleDone('${sysName}')">${state.done ? '✓' : ''}</button><div class="counter-wrapper green-zone"><button class="counter-btn" onclick="updateCount('${sysName}', 'g', -1)">◀</button><div class="counter-val">${state.g}</div><button class="counter-btn" onclick="updateCount('${sysName}', 'g', 1)">▶</button></div><div class="counter-wrapper red-zone"><button class="counter-btn" onclick="updateCount('${sysName}', 'r', -1)">◀</button><div class="counter-val">${state.r}</div><button class="counter-btn" onclick="updateCount('${sysName}', 'r', 1)">▶</button></div></div>`;
+                listContainer.appendChild(row);
+            });
+            const percent = (completed / systems.length) * 100;
+            progressBar.style.width = percent + '%';
+            countSpan.innerText = completed + ' / ' + systems.length + ' (' + Math.round(percent) + '%)';
+            totalGSpan.innerText = totalG; totalRSpan.innerText = totalR;
+            if (percent === 100) { progressBar.style.background = "#20b2aa"; progressBar.style.boxShadow = "0 0 20px #20b2aa"; }
+            else { progressBar.style.background = "#39FF14"; progressBar.style.boxShadow = "0 0 15px #39FF14"; }
+        }
+        window.toggleDone = function(sysName) { if (!savedState[sysName]) savedState[sysName] = { done: false, g: 0, r: 0 }; savedState[sysName].done = !savedState[sysName].done; save(); render(); }
+        window.updateCount = function(sysName, type, delta) { if (!savedState[sysName]) savedState[sysName] = { done: false, g: 0, r: 0 }; if (type === 'g') savedState[sysName].g = Math.max(0, (savedState[sysName].g || 0) + delta); else if (type === 'r') savedState[sysName].r = Math.max(0, (savedState[sysName].r || 0) + delta); save(); render(); }
+        function save() { localStorage.setItem(storageKey, JSON.stringify(savedState)); }
+        window.copyText = function(text, btnElement) { navigator.clipboard.writeText(text).then(() => { const originalText = btnElement.innerText; btnElement.innerText = "COPIED"; btnElement.style.borderColor = "#20b2aa"; btnElement.style.color = "#20b2aa"; setTimeout(() => { btnElement.innerText = originalText; btnElement.style.borderColor = ""; btnElement.style.color = ""; }, 1000); }); }
+        render();
+    </script>
+</body>
+</html>
