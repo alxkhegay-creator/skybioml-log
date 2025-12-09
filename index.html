@@ -2,10 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>SkyBioML Command Center</title>
+    <title>SECURE TERMINAL // ACCESS REQUIRED</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="SKYBIOML COMMAND CENTER" />
-    <meta property="og:description" content="Operational Hub // Commander TAO" />
+    <meta property="og:description" content="Restricted Access. Authorization Required." />
     <meta name="theme-color" content="#39FF14">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,14 +18,87 @@
             color: #39FF14;
             font-family: 'Audiowide', sans-serif;
             margin: 0;
-            padding: 40px 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* SCANLINES EFFECT */
+        /* --- ЭКРАН БЛОКИРОВКИ --- */
+        #lock-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s;
+        }
+
+        .lock-title {
+            font-size: 24px;
+            color: #ff4444;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #ff4444;
+            text-align: center;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #password-input {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            font-family: 'Audiowide', sans-serif;
+            font-size: 24px;
+            padding: 10px 20px;
+            text-align: center;
+            width: 250px;
+            outline: none;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.2);
+        }
+
+        #password-input::placeholder { color: rgba(255, 68, 68, 0.3); letter-spacing: 1px; }
+        
+        #login-btn {
+            background: #ff4444;
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            font-family: 'Audiowide', sans-serif;
+            font-size: 18px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+        }
+        
+        #login-btn:hover { background: #fff; box-shadow: 0 0 30px #fff; }
+
+        .access-denied { animation: shake 0.5s; border-color: red !important; }
+        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); } }
+
+        /* --- СКРЫТЫЙ КОНТЕНТ (Появится после входа) --- */
+        #secure-content {
+            display: none; /* Скрыто по умолчанию */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* --- СТИЛИ МЕНЮ (Те же самые) --- */
         .scanlines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -57,7 +130,7 @@
 
         .subtitle {
             font-size: 18px;
-            color: #ff4444; /* КРАСНЫЙ */
+            color: #ff4444; 
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 40px;
@@ -66,7 +139,6 @@
             font-weight: bold;
         }
 
-        /* MISSION LIST SECTION */
         .archive-title {
             font-size: 14px;
             color: #20b2aa;
@@ -122,23 +194,75 @@
 </head>
 <body>
 
-    <div class="scanlines"></div>
-    <div class="vignette"></div>
+    <div id="lock-screen">
+        <div class="lock-title">RESTRICTED AREA</div>
+        <div class="input-group">
+            <input type="password" id="password-input" placeholder="PASSCODE">
+        </div>
+        <button id="login-btn" onclick="checkAccess()">AUTHENTICATE</button>
+    </div>
 
-    <h1>SKYBIOML COMMAND CENTER</h1>
-    <div class="subtitle">Commander: TAO</div>
+    <div id="secure-content" style="display:none;">
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
 
-    <div class="archive-title">ACTIVE FLIGHT LOGS</div>
+        <h1>SKYBIOML COMMAND CENTER</h1>
+        <div class="subtitle">Commander: III TAO III</div>
 
-    <div class="mission-list">
-        
-        <a href="Log_07.12.25 eDelrian" class="mission-link">
-            LOG // eDelrian
-            <span>ACTIVE</span>
-        </a>
+        <div class="archive-title">ACTIVE FLIGHT LOGS</div>
+
+        <div class="mission-list">
+            
+            <a href="Log_eDelrian.html" class="mission-link">
+                LOG // eDelrian
+                <span>ACTIVE</span>
+            </a>
 
         </div>
+    </div>
+
+    <script>
+        // === НАСТРОЙКА БЕЗОПАСНОСТИ ===
+        const PASSCODE = "163600"; // <--- ЗАМЕНИ ЭТО НА СВОЙ ПАРОЛЬ
+        // ==============================
+
+        const input = document.getElementById('password-input');
+        const lockScreen = document.getElementById('lock-screen');
+        const content = document.getElementById('secure-content');
+
+        // Проверка при нажатии Enter
+        input.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkAccess();
+            }
+        });
+
+        function checkAccess() {
+            if (input.value.toUpperCase() === PASSCODE) {
+                // УСПЕХ: Зеленая вспышка и открытие
+                input.style.borderColor = "#39FF14";
+                input.style.color = "#39FF14";
+                input.value = "ACCESS GRANTED";
+                document.title = "SKYBIOML // COMMANDER ACTIVE";
+                
+                setTimeout(() => {
+                    lockScreen.style.opacity = "0";
+                    setTimeout(() => {
+                        lockScreen.style.display = "none";
+                        content.style.display = "flex"; // Показываем контент
+                    }, 500);
+                }, 800);
+            } else {
+                // ОШИБКА: Красная тряска
+                input.classList.add('access-denied');
+                input.value = "";
+                input.placeholder = "INVALID";
+                setTimeout(() => {
+                    input.classList.remove('access-denied');
+                }, 500);
+            }
+        }
+    </script>
 
 </body>
 </html>
-
