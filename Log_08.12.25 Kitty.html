@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Mission Log: 08.12.25 Kitty</title>
+
+<meta property="og:title" content="STRATUM LOG // 08.12.25 Kitty" />
+<meta property="og:description" content="Commander: TAO | Systems: 85 | Squadron: SkyBioML" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#39FF14">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<style>
+    /* ОСНОВНОЙ ЦВЕТ: #39FF14 (Neon Green) */
+    
+    body { background-color: #050a05; color: #39FF14; font-family: 'Audiowide', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-y: scroll; }
+    
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #050a05; }
+    ::-webkit-scrollbar-thumb { background: #1a331a; border: 1px solid #39FF14; }
+    ::-webkit-scrollbar-thumb:hover { background: #39FF14; }
+    
+    h1 { text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #39FF14; padding-bottom: 10px; margin: 0 0 10px 0; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); font-weight: 400; text-align: center; }
+    
+    /* КРАСНЫЙ ЗАГОЛОВОК КОМАНДИРА (ОСТАВИЛИ КАК БЫЛО) */
+    .subtitle { 
+        font-size: 18px; 
+        color: #ff4444; 
+        text-transform: uppercase; 
+        letter-spacing: 1.5px; 
+        margin-bottom: 30px; 
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        font-weight: bold;
+    }
+
+    /* ПРОГРЕСС БАР (ЗЕЛЕНЫЙ) */
+    #progress-container { width: 100%; max-width: 600px; background: #0d1a0d; border: 1px solid #39FF14; height: 24px; margin-bottom: 20px; position: relative; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
+    #progress-bar { height: 100%; background: #39FF14; width: 0%; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 15px #39FF14; position: relative; }
+    #progress-bar::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg); }
+    
+    #stats { margin-bottom: 20px; font-size: 14px; text-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
+    .container { width: 100%; max-width: 700px; padding-bottom: 50px; }
+    
+    /* СТРОКИ СИСТЕМ */
+    .row { display: flex; align-items: center; background: rgba(57, 255, 20, 0.05); border: 1px solid #1a4d1a; border-left: 4px solid #1a4d1a; margin-bottom: 10px; padding: 12px 20px; transition: all 0.2s; position: relative; }
+    .row:hover { border-color: #39FF14; border-left-color: #39FF14; background: rgba(57, 255, 20, 0.15); transform: translateX(5px); box-shadow: -5px 0 15px rgba(57, 255, 20, 0.2); }
+    
+    .row.done { opacity: 0.4; border-color: #111; border-left-color: #111; background: #000; transform: none; box-shadow: none; filter: grayscale(100%); }
+    .row.done .system-name { text-decoration: line-through; color: #444; text-shadow: none; }
+    
+    .system-info { flex-grow: 1; display: flex; align-items: center; }
+    .system-num { color:#20b2aa; margin-right:15px; font-size: 0.8em; min-width: 30px; }
+    .system-name { font-size: 18px; letter-spacing: 0.5px; margin-right: 10px; }
+    
+    /* Прыжки (чуть другой оттенок, ближе к Teal, чтобы не сливалось) */
+    .jump-badge { font-size: 10px; border: 1px solid #20b2aa; color: #20b2aa; padding: 2px 6px; border-radius: 2px; margin-right: 15px; white-space: nowrap; background: rgba(32, 178, 170, 0.1); }
+    
+    .controls { display: flex; gap: 12px; }
+    
+    button { background: rgba(0,0,0,0.5); border: 1px solid #39FF14; color: #39FF14; padding: 8px 16px; cursor: pointer; font-family: 'Audiowide', sans-serif; text-transform: uppercase; font-size: 12px; transition: 0.2s; letter-spacing: 1px; }
+    button:hover { background: #39FF14; color: #000; box-shadow: 0 0 20px #39FF14; }
+    
+    .copy-btn { min-width: 90px; }
+    .check-btn { width: 36px; text-align: center; padding: 8px 0; font-size: 14px; }
+    .check-btn.checked { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
+    
+    .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3)); background-size: 100% 4px; pointer-events: none; z-index: 999; opacity: 0.15; }
+    .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 60%, black 100%); pointer-events: none; z-index: 998; opacity: 0.6; }
+</style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <h1>08.12.25 Kitty</h1>
+    <div class="subtitle">Commander: TAO | Squadron: SkyBioML</div>
+    <div id="stats">SYSTEMS SCANNED: <span id="count">0/0</span></div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <div class="container" id="list-container"></div>
+    <script>
+        const systems = [{"name":"Thailio BN-H d11-81","jumps":"0"},{"name":"Blau Euq AQ-G d10-23","jumps":"3"},{"name":"Thailio OZ-M d8-34","jumps":"3"},{"name":"Blau Euq WD-A c14-12","jumps":"3"},{"name":"Blau Euq MB-F c11-15","jumps":"3"},{"name":"Thailio ZA-U d4-81","jumps":"2"},{"name":"Blau Euq VO-X b28-0","jumps":"4"},{"name":"Blau Euq PI-K d8-75","jumps":"2"},{"name":"Blau Euq ON-K d8-9","jumps":"2"},{"name":"Blau Euq IP-I b38-2","jumps":"3"},{"name":"Blau Euq OF-T c18-0","jumps":"4"},{"name":"Blau Euq OP-H b39-1","jumps":"5"},{"name":"Blau Euq CH-D b42-0","jumps":"4"},{"name":"Blau Euq NN-J d9-16","jumps":"3"},{"name":"Blau Euq BA-Q d5-7","jumps":"6"},{"name":"Blau Euq BA-Q d5-26","jumps":"1"},{"name":"Blau Euq BY-C b28-1","jumps":"4"},{"name":"Blau Euq CN-Z c14-1","jumps":"3"},{"name":"Blau Euq ES-A c14-1","jumps":"2"},{"name":"Blau Euq DT-E b26-2","jumps":"1"},{"name":"Blau Euq QB-I b24-2","jumps":"2"},{"name":"Blau Euq PG-Z b28-0","jumps":"2"},{"name":"Blau Euq GE-E b26-2","jumps":"1"},{"name":"Blau Euq ZZ-G c10-16","jumps":"3"},{"name":"Thailio OG-O c9-1","jumps":"2"},{"name":"Thailio LZ-I b28-1","jumps":"4"},{"name":"Thailio MS-E b17-2","jumps":"4"},{"name":"Thailio JU-S c6-9","jumps":"2"},{"name":"Thailio KE-C b18-2","jumps":"3"},{"name":"Blau Euq YK-P d5-78","jumps":"5"},{"name":"Blau Euq KD-U b31-0","jumps":"5"},{"name":"Blau Euq TU-G d10-65","jumps":"5"},{"name":"Blau Euq WY-S b45-2","jumps":"4"},{"name":"Blau Euq YE-Q b47-0","jumps":"2"},{"name":"Blau Euq FS-B d13-0","jumps":"2"},{"name":"Byoi Euq XT-A d33","jumps":"4"},{"name":"Byoi Euq AL-N c7-7","jumps":"4"},{"name":"Byoi Euq KA-M b9-1","jumps":"5"},{"name":"Byoi Euq HN-B b1-1","jumps":"3"},{"name":"Blau Euq JI-Y c28-6","jumps":"5"},{"name":"Blau Euq LH-X b56-7","jumps":"4"},{"name":"Pyraloa VG-L b1","jumps":"3"},{"name":"Thailio SF-M a103-3","jumps":"6"},{"name":"Thailio CS-H d11-74","jumps":"3"},{"name":"Thailio TG-W c18-16","jumps":"3"},{"name":"Thailio UP-M d8-39","jumps":"3"},{"name":"Thailio TC-E b31-2","jumps":"3"},{"name":"Thailio HB-F b31-5","jumps":"2"},{"name":"Thailio JA-H b30-6","jumps":"3"},{"name":"Thailio RT-O d7-59","jumps":"3"},{"name":"Thailio MI-X b20-2","jumps":"4"},{"name":"Thailio ON-S d4-9","jumps":"10"},{"name":"Thailio YS-V b33-0","jumps":"9"},{"name":"Thailio UC-P b36-0","jumps":"3"},{"name":"Thailio JU-E d12-7","jumps":"5"},{"name":"Thailio MD-K b53-0","jumps":"2"},{"name":"Pyraloa TD-B d12","jumps":"5"},{"name":"Pyraloa CY-I b13-1","jumps":"6"},{"name":"Pyraloa XL-K b13-0","jumps":"4"},{"name":"Pyraloa RO-X d2-48","jumps":"4"},{"name":"Pyraloa RO-X d2-50","jumps":"1"},{"name":"Pyraloa UJ-J b15-11","jumps":"4"},{"name":"Pyraloa MI-F b16-1","jumps":"5"},{"name":"Pyraloa BC-G b16-3","jumps":"2"},{"name":"Gru Drye ZR-T b8-3","jumps":"5"},{"name":"Byaa Eurk NF-A d77","jumps":"7"},{"name":"Blau Euq IB-B b56-0","jumps":"4"},{"name":"Blau Euq GQ-Z b57-1","jumps":"5"},{"name":"Blau Euq XT-C c27-5","jumps":"3"},{"name":"Blau Euq GT-K b49-6","jumps":"6"},{"name":"Blau Euq DZ-Y b55-1","jumps":"3"},{"name":"Blau Euq RP-H b51-5","jumps":"2"},{"name":"Blau Euq SM-Z c27-10","jumps":"2"},{"name":"Thailio JF-C d14-70","jumps":"3"},{"name":"Thailio KA-C d14-11","jumps":"2"},{"name":"Pyraloa QY-E b3-0","jumps":"2"},{"name":"Thailio OV-B d14-45","jumps":"4"},{"name":"Pyraloa HH-C d13","jumps":"2"},{"name":"Thailio LU-D d13-43","jumps":"3"},{"name":"Thailio KC-C c29-9","jumps":"2"},{"name":"Pyraloa TD-B b4-1","jumps":"4"},{"name":"Thailio FP-F b57-0","jumps":"3"},{"name":"Thailio IU-G b43-1","jumps":"5"},{"name":"Thailio VQ-K d9-33","jumps":"3"},{"name":"Thailio BB-N c23-7","jumps":"4"}];
+        const listContainer = document.getElementById('list-container');
+        const countSpan = document.getElementById('count');
+        const progressBar = document.getElementById('progress-bar');
+        const storageKey = 'skybioml_log_' + "08.12.25 Kitty".replace(/\s+/g, '_');
+        let savedChecks = {};
+        try { if(localStorage.getItem(storageKey)) savedChecks = JSON.parse(localStorage.getItem(storageKey)); } catch(e){}
+
+        function render() {
+            listContainer.innerHTML = '';
+            let completed = 0;
+            systems.forEach((item, index) => {
+                const sysName = item.name;
+                const jumps = item.jumps;
+                const isDone = savedChecks[sysName] === true;
+                if (isDone) completed++;
+                const row = document.createElement('div');
+                row.className = 'row ' + (isDone ? 'done' : '');
+                const num = (index + 1).toString().padStart(2, '0');
+                row.innerHTML = `<div class="system-info"><span class="system-num">${num}</span><div class="system-name">${sysName}</div><div class="jump-badge">${jumps} JUMPS</div></div><div class="controls"><button class="copy-btn" onclick="copyText('${sysName}', this)">COPY</button><button class="check-btn ${isDone ? 'checked' : ''}" onclick="toggleDone('${sysName}')">${isDone ? '✓' : ''}</button></div>`;
+                listContainer.appendChild(row);
+            });
+            const percent = (completed / systems.length) * 100;
+            progressBar.style.width = percent + '%';
+            countSpan.innerText = completed + ' / ' + systems.length + ' (' + Math.round(percent) + '%)';
+            if (percent === 100) { progressBar.style.background = "#20b2aa"; progressBar.style.boxShadow = "0 0 20px #20b2aa"; }
+            else { progressBar.style.background = "#39FF14"; progressBar.style.boxShadow = "0 0 15px #39FF14"; }
+        }
+        window.toggleDone = function(sysName) { if (savedChecks[sysName]) delete savedChecks[sysName]; else savedChecks[sysName] = true; localStorage.setItem(storageKey, JSON.stringify(savedChecks)); render(); }
+        window.copyText = function(text, btnElement) { navigator.clipboard.writeText(text).then(() => { const originalText = btnElement.innerText; btnElement.innerText = "COPIED"; btnElement.style.borderColor = "#20b2aa"; btnElement.style.color = "#20b2aa"; setTimeout(() => { btnElement.innerText = originalText; btnElement.style.borderColor = ""; btnElement.style.color = ""; }, 1000); }); }
+        render();
+    </script>
+</body>
+</html>
