@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Mission Log: kart skirata 18.12.25</title>
+<meta property="og:title" content="STRATUM LOG // kart skirata 18.12.25" />
+<meta property="og:description" content="Commander: III TAO III | Systems: 114 | Squadron: SkyBioML" />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#39FF14">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<style>
+    body { background-color: #050a05; color: #39FF14; font-family: 'Audiowide', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-y: scroll; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #050a05; }
+    ::-webkit-scrollbar-thumb { background: #1a331a; border: 1px solid #39FF14; }
+    ::-webkit-scrollbar-thumb:hover { background: #39FF14; }
+    h1 { text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #39FF14; padding-bottom: 10px; margin: 0 0 10px 0; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); font-weight: 400; text-align: center; }
+    .subtitle { font-size: 18px; color: #ff4444; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 30px; text-align: center; text-shadow: 0 0 10px rgba(255, 0, 0, 0.6); font-weight: bold; }
+    #dashboard { width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; font-size: 14px; text-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
+    .stat-group { display: flex; align-items: center; gap: 10px; font-size: 16px; }
+    .total-label { color: #39FF14; font-weight: bold; margin-right: 5px; }
+    .total-val { font-size: 20px; font-weight: bold; min-width: 30px; text-align: center; }
+    .total-green { color: #39FF14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.8); }
+    .total-red { color: #ff4444; text-shadow: 0 0 10px rgba(255, 68, 68, 0.8); }
+    #progress-container { width: 100%; max-width: 800px; background: #0d1a0d; border: 1px solid #39FF14; height: 24px; margin-bottom: 20px; position: relative; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
+    #progress-bar { height: 100%; background: #39FF14; width: 0%; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: 0 0 15px #39FF14; position: relative; }
+    .container { width: 100%; max-width: 850px; padding-bottom: 50px; }
+    .row { display: flex; align-items: center; background: rgba(57, 255, 20, 0.05); border: 1px solid #1a4d1a; border-left: 4px solid #1a4d1a; margin-bottom: 10px; padding: 12px 15px; transition: all 0.2s; position: relative; }
+    .row:hover { border-color: #39FF14; border-left-color: #39FF14; background: rgba(57, 255, 20, 0.15); transform: translateX(5px); box-shadow: -5px 0 15px rgba(57, 255, 20, 0.2); }
+    .row.done { opacity: 0.5; border-color: #111; border-left-color: #111; background: #000; filter: grayscale(80%); }
+    .row.done .system-name { text-decoration: line-through; color: #444; text-shadow: none; }
+    .system-info { flex-grow: 1; display: flex; align-items: center; overflow: hidden; }
+    .system-num { color:#20b2aa; margin-right:15px; font-size: 0.8em; min-width: 25px; }
+    .system-name { font-size: 16px; letter-spacing: 0.5px; margin-right: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .jump-badge { font-size: 10px; border: 1px solid #20b2aa; color: #20b2aa; padding: 2px 6px; border-radius: 2px; margin-right: 10px; white-space: nowrap; background: rgba(32, 178, 170, 0.1); }
+    .controls { display: flex; gap: 8px; align-items: center; }
+    button { background: rgba(0,0,0,0.5); border: 1px solid #39FF14; color: #39FF14; padding: 0; cursor: pointer; font-family: 'Audiowide', sans-serif; text-transform: uppercase; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    button:hover { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
+    .copy-btn { height: 30px; padding: 0 15px; font-size: 12px; min-width: 60px; }
+    .check-btn { width: 30px; height: 30px; font-size: 14px; margin-right: 10px; } 
+    .check-btn.checked { background: #39FF14; color: #000; box-shadow: 0 0 10px #39FF14; }
+    .counter-wrapper { display: flex; align-items: center; margin-left: 5px; background: rgba(0,0,0,0.3); border-radius: 4px; padding: 2px; border: 1px solid #222; }
+    .counter-btn { width: 24px; height: 24px; font-size: 10px; border: 1px solid #444; color: #666; }
+    .counter-val { min-width: 30px; text-align: center; font-size: 16px; font-weight: bold; }
+    .green-zone .counter-val { color: #39FF14; text-shadow: 0 0 8px rgba(57, 255, 20, 0.6); }
+    .green-zone .counter-btn:hover { border-color: #39FF14; color: #39FF14; background: rgba(57, 255, 20, 0.1); }
+    .red-zone { border-color: #331111; }
+    .red-zone .counter-val { color: #ff4444; text-shadow: 0 0 8px rgba(255, 68, 68, 0.6); }
+    .red-zone .counter-btn:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.1); }
+    .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3)); background-size: 100% 4px; pointer-events: none; z-index: 999; opacity: 0.15; }
+    .vignette { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 60%, black 100%); pointer-events: none; z-index: 998; opacity: 0.6; }
+</style>
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <h1>kart skirata 18.12.25</h1>
+    <div class="subtitle">Commander: III TAO III | Squadron: SkyBioML</div>
+    <div id="dashboard">
+        <div id="stats-scanned">SYSTEMS SCANNED: <span id="count">0/0</span></div>
+        <div class="stat-group">
+            <span class="total-label">TOTAL:</span>
+            <span id="total-g" class="total-val total-green">0</span>
+            <span id="total-r" class="total-val total-red" style="margin-left: 15px;">0</span>
+        </div>
+    </div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <div class="container" id="list-container"></div>
+    <script>
+        const systems = [{"name":"Bleia Eohn QJ-F d12-8","jumps":"0"},{"name":"Bleia Eohn GH-L b54-0","jumps":"2"},{"name":"Bleia Eohn VK-D d13-20","jumps":"2"},{"name":"Bleia Eohn NY-G d11-19","jumps":"3"},{"name":"Bleia Eohn IS-I d10-26","jumps":"2"},{"name":"Bleia Eohn EM-W b47-0","jumps":"3"},{"name":"Bleia Eohn PE-F d12-22","jumps":"2"},{"name":"Bleia Eohn SP-D d13-30","jumps":"3"},{"name":"M20 Sector QD-T d3-19","jumps":"3"},{"name":"Droju UI-F c10","jumps":"2"},{"name":"M20 Sector UF-E b12-4","jumps":"2"},{"name":"M20 Sector SE-Q c5-9","jumps":"1"},{"name":"M20 Sector RT-R c4-16","jumps":"1"},{"name":"Bleia Eohn NZ-D d13-3","jumps":"1"},{"name":"Bleia Eohn NZ-D d13-16","jumps":"1"},{"name":"Bleia Eohn MZ-D d13-31","jumps":"1"},{"name":"Bleia Eohn HK-M b54-0","jumps":"1"},{"name":"Bleia Eohn OU-D d13-26","jumps":"2"},{"name":"Bleia Eohn NP-W b48-1","jumps":"2"},{"name":"Bleia Eohn JK-Q c21-12","jumps":"2"},{"name":"Bleia Eohn PK-E b45-3","jumps":"2"},{"name":"Bleia Eohn KJ-G b44-3","jumps":"1"},{"name":"Bleia Eohn RL-B b47-1","jumps":"1"},{"name":"M20 Sector CQ-Y d56","jumps":"2"},{"name":"M20 Sector AV-Y d41","jumps":"1"},{"name":"M20 Sector WE-X b2-5","jumps":"1"},{"name":"M20 Sector BV-Y d34","jumps":"1"},{"name":"M20 Sector EL-X c1-4","jumps":"1"},{"name":"M20 Sector DQ-Y d34","jumps":"1"},{"name":"M20 Sector HW-W d1-7","jumps":"1"},{"name":"M20 Sector DQ-Y d11","jumps":"1"},{"name":"M20 Sector NG-W b2-7","jumps":"1"},{"name":"Bleia Eohn MS-Z b47-6","jumps":"1"},{"name":"Bleia Eohn CL-D b46-6","jumps":"1"},{"name":"Bleia Eohn RY-G b44-9","jumps":"1"},{"name":"Bleia Eohn ST-G b44-1","jumps":"1"},{"name":"Bleia Eohn GS-H d11-10","jumps":"1"},{"name":"M20 Sector PR-U b3-2","jumps":"1"},{"name":"M20 Sector YN-S b4-0","jumps":"1"},{"name":"M20 Sector ZD-S b4-4","jumps":"2"},{"name":"Bleia Eohn DL-E b45-3","jumps":"2"},{"name":"Bleia Eohn JG-N b40-0","jumps":"2"},{"name":"Bleia Eohn GI-U c19-15","jumps":"2"},{"name":"Bleae Thua HQ-G d10-18","jumps":"3"},{"name":"Bleae Thua NK-V b43-1","jumps":"1"},{"name":"M20 Sector CG-W c2-1","jumps":"3"},{"name":"M20 Sector BV-Y d103","jumps":"2"},{"name":"Bleae Thua UR-A b41-1","jumps":"2"},{"name":"Bleia Eohn UJ-G b44-3","jumps":"2"},{"name":"Bleia Eohn AV-O b39-0","jumps":"2"},{"name":"Bleia Eohn YA-L d9-63","jumps":"1"},{"name":"Bleia Eohn WQ-X c17-9","jumps":"2"},{"name":"Bleia Eohn ES-V c18-10","jumps":"2"},{"name":"Bleia Eohn TL-P b38-0","jumps":"2"},{"name":"Bleia Eohn QF-J b41-0","jumps":"2"},{"name":"Bleia Eohn RJ-T c19-6","jumps":"1"},{"name":"Bleia Eohn LQ-X b47-0","jumps":"3"},{"name":"Bleia Eohn BX-M c23-11","jumps":"1"},{"name":"Aucoks OQ-B b46-2","jumps":"2"},{"name":"Aucoks YC-H d11-12","jumps":"1"},{"name":"Aucoks TG-B b46-1","jumps":"1"},{"name":"Aucoks WV-M c23-8","jumps":"1"},{"name":"Aucoks KL-A b47-1","jumps":"1"},{"name":"Aucoks XL-L c24-0","jumps":"1"},{"name":"Aucoks UN-V b49-0","jumps":"1"},{"name":"Aucoks ZS-F d12-64","jumps":"1"},{"name":"Aucoks DU-C b46-0","jumps":"2"},{"name":"Bleia Eohn JR-B b47-11","jumps":"2"},{"name":"Bleia Eohn FV-E b45-1","jumps":"1"},{"name":"Aucoks YO-B b47-2","jumps":"1"},{"name":"M20 Sector GB-X d1-73","jumps":"2"},{"name":"Bleae Thua AZ-H c23-11","jumps":"1"},{"name":"Bleae Thua HT-Y b41-1","jumps":"2"},{"name":"Bleae Thua AN-A b41-1","jumps":"1"},{"name":"Bleia Eohn YF-L d9-20","jumps":"1"},{"name":"Bleia Eohn ST-P b39-8","jumps":"2"},{"name":"Bleia Eohn PI-R b38-4","jumps":"1"},{"name":"Bleia Eohn WF-M b41-6","jumps":"2"},{"name":"M20 Sector RI-B c21","jumps":"2"},{"name":"M20 Sector AV-Y d113","jumps":"1"},{"name":"M20 Sector CB-W c2-12","jumps":"1"},{"name":"M20 Sector ER-T b4-2","jumps":"1"},{"name":"M20 Sector CQ-Y d66","jumps":"1"},{"name":"M20 Sector JC-U c3-23","jumps":"1"},{"name":"M20 Sector MN-T d3-31","jumps":"2"},{"name":"M20 Sector XQ-B b14-7","jumps":"1"},{"name":"M20 Sector MN-T d3-52","jumps":"1"},{"name":"M20 Sector PU-E b12-3","jumps":"1"},{"name":"M20 Sector YQ-B b14-2","jumps":"2"},{"name":"M20 Sector YQ-B b14-4","jumps":"1"},{"name":"M20 Sector YP-D b13-0","jumps":"2"},{"name":"M20 Sector UO-Q c5-12","jumps":"1"},{"name":"M20 Sector AW-B b14-5","jumps":"1"},{"name":"M20 Sector GH-L c8-1","jumps":"1"},{"name":"M20 Sector QZ-V b16-1","jumps":"1"},{"name":"M20 Sector PZ-V b16-0","jumps":"1"},{"name":"M20 Sector PZ-V b16-3","jumps":"1"},{"name":"M20 Sector SD-T d3-40","jumps":"2"},{"name":"Droju ZS-H b2-4","jumps":"2"},{"name":"Droju PH-C d9","jumps":"3"},{"name":"Droju PM-C d11","jumps":"2"},{"name":"Bleia Eohn ZV-B d14-20","jumps":"2"},{"name":"Bleia Eohn VP-D d13-11","jumps":"2"},{"name":"Aucoks FU-D d13-18","jumps":"3"},{"name":"Bleia Eohn RL-E c28-8","jumps":"3"},{"name":"Bleia Eohn MD-P b53-2","jumps":"2"},{"name":"M20 Sector LH-V d2-0","jumps":"2"},{"name":"M20 Sector JC-K b9-5","jumps":"2"},{"name":"M20 Sector LM-L b8-1","jumps":"1"},{"name":"M20 Sector EW-L b8-3","jumps":"1"},{"name":"M20 Sector LH-V c2-10","jumps":"2"},{"name":"M20 Sector QN-T c3-8","jumps":"1"},{"name":"M20 Sector RN-T c3-9","jumps":"1"},{"name":"Bleia Eohn GO-J c25-11","jumps":"2"}];
+        const listContainer = document.getElementById('list-container');
+        const countSpan = document.getElementById('count');
+        const progressBar = document.getElementById('progress-bar');
+        const totalGSpan = document.getElementById('total-g');
+        const totalRSpan = document.getElementById('total-r');
+        const storageKey = 'skybioml_log_' + "kart skirata 18.12.25".replace(/\s+/g, '_');
+        let savedState = {};
+        try { const raw = localStorage.getItem(storageKey); if(raw) savedState = JSON.parse(raw); } catch(e){}
+        function render() {
+            listContainer.innerHTML = '';
+            let completed = 0; let totalG = 0; let totalR = 0;
+            systems.forEach((item, index) => {
+                const sysName = item.name; const jumps = item.jumps;
+                const state = savedState[sysName] || { done: false, g: 0, r: 0 };
+                if (state.done) completed++;
+                totalG += (state.g || 0); totalR += (state.r || 0);
+                const row = document.createElement('div');
+                row.className = 'row ' + (state.done ? 'done' : '');
+                const num = (index + 1).toString().padStart(2, '0');
+                row.innerHTML = `<div class="system-info"><span class="system-num">${num}</span><div class="system-name">${sysName}</div><div class="jump-badge">${jumps} JUMPS</div></div><div class="controls"><button class="copy-btn" onclick="copyText('${sysName}', this)">COPY</button><button class="check-btn ${state.done ? 'checked' : ''}" onclick="toggleDone('${sysName}')">${state.done ? '✓' : ''}</button><div class="counter-wrapper green-zone"><button class="counter-btn" onclick="updateCount('${sysName}', 'g', -1)">◀</button><div class="counter-val">${state.g}</div><button class="counter-btn" onclick="updateCount('${sysName}', 'g', 1)">▶</button></div><div class="counter-wrapper red-zone"><button class="counter-btn" onclick="updateCount('${sysName}', 'r', -1)">◀</button><div class="counter-val">${state.r}</div><button class="counter-btn" onclick="updateCount('${sysName}', 'r', 1)">▶</button></div></div>`;
+                listContainer.appendChild(row);
+            });
+            const percent = (completed / systems.length) * 100;
+            progressBar.style.width = percent + '%';
+            countSpan.innerText = completed + ' / ' + systems.length + ' (' + Math.round(percent) + '%)';
+            totalGSpan.innerText = totalG; totalRSpan.innerText = totalR;
+            if (percent === 100) { progressBar.style.background = "#20b2aa"; progressBar.style.boxShadow = "0 0 20px #20b2aa"; }
+            else { progressBar.style.background = "#39FF14"; progressBar.style.boxShadow = "0 0 15px #39FF14"; }
+        }
+        window.toggleDone = function(sysName) { if (!savedState[sysName]) savedState[sysName] = { done: false, g: 0, r: 0 }; savedState[sysName].done = !savedState[sysName].done; save(); render(); }
+        window.updateCount = function(sysName, type, delta) { if (!savedState[sysName]) savedState[sysName] = { done: false, g: 0, r: 0 }; if (type === 'g') savedState[sysName].g = Math.max(0, (savedState[sysName].g || 0) + delta); else if (type === 'r') savedState[sysName].r = Math.max(0, (savedState[sysName].r || 0) + delta); save(); render(); }
+        function save() { localStorage.setItem(storageKey, JSON.stringify(savedState)); }
+        window.copyText = function(text, btnElement) { navigator.clipboard.writeText(text).then(() => { const originalText = btnElement.innerText; btnElement.innerText = "COPIED"; btnElement.style.borderColor = "#20b2aa"; btnElement.style.color = "#20b2aa"; setTimeout(() => { btnElement.innerText = originalText; btnElement.style.borderColor = ""; btnElement.style.color = ""; }, 1000); }); }
+        render();
+    </script>
+</body>
+</html>
